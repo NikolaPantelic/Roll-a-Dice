@@ -26,12 +26,34 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
         document.getElementById("current-" + activePlayer).textContent = roundScore;
     } else {
         // next player
-        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
-        roundScore = 0;
-        document.getElementById("current-0").textContent = "0";
-        document.getElementById("current-1").textContent = "0";
-        document.querySelector(".player-0-panel").classList.toggle("active");
-        document.querySelector(".player-1-panel").classList.toggle("active");
+        nextPlayer();
+        // hiding the dice with timeout so that result of 1 can be visible for a short time
+        setTimeout(function () {
+            diceDOM.style.display = "none";
+        }, 500);
     }
 });
 
+document.querySelector(".btn-hold").addEventListener("click", function () {
+    // add current score to the global score
+    scores[activePlayer] += roundScore;
+    // update the ui
+    document.getElementById("score-" + activePlayer).textContent = scores[activePlayer];
+
+    // check if active player won the game
+    if (scores[activePlayer] >= 10) {
+        document.getElementById("name-" + activePlayer).textContent = "WINNER !!!";
+    } else {
+        // next player
+        nextPlayer();
+    }
+});
+
+function nextPlayer() {
+    activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
+    roundScore = 0;
+    document.getElementById("current-0").textContent = "0";
+    document.getElementById("current-1").textContent = "0";
+    document.querySelector(".player-0-panel").classList.toggle("active");
+    document.querySelector(".player-1-panel").classList.toggle("active");
+}
